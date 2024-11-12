@@ -7,9 +7,19 @@
 // Configuration files
 
 #include "../config/clock_globals.h"
+#include "../config/timer_globals.h"
 
 
-void *create_clock( void *args ){
+// Initialize extern variables
+
+pthread_mutex_t clock_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t timer_cond = PTHREAD_COND_INITIALIZER; 
+pthread_cond_t free_timer_tick = PTHREAD_COND_INITIALIZER; 
+
+
+int done_timers = 0;
+
+void *create_clock(void *args) {
 
     struct Clock *defined_clock = (struct Clock *) args;
 
@@ -19,25 +29,29 @@ void *create_clock( void *args ){
     }
 
     int tick_interval_microseconds = 1000000 / defined_clock->simulating_hz;
-    int tick_counter = 0; 
-    int second_counter = 0; 
-
+    int tick_counter = 0;
 
     printf("Clock ID %d created. Running at %d Hz.\n", defined_clock->id, defined_clock->simulating_hz);
 
+    pthread_mutex_lock(&clock_mutex);
+
     while (1) { 
+
+        usleep(tick_interval_microseconds);
+
+        // Wait until all timers have completed their ticks
+        while (done_timers < TIMER_NUM) {
+            pthread_cond_wait(&timer_cond, &clock_mutex);
+        }
+
+        done_timers = 0;
+        pthread_cond_broadcast(&free_timer_tick);
 
         printf("Clock ID %d tick %d.\n", defined_clock->id, ++tick_counter);
 
-        if (tick_counter % defined_clock->simulating_hz == 0) {
-            second_counter++; 
-            printf("Clock ID %d has been running for %d seconds.\n", defined_clock->id, second_counter);
-        }
-
-        usleep(tick_interval_microseconds);
     }
 
+    pthread_mutex_unlock(&clock_mutex); 
 
-    return NULL; 
+    return NULL;
 }
-

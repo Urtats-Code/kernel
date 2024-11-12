@@ -1,3 +1,7 @@
+#ifndef PROCESS_GLOBALS_H
+#define PROCESS_GLOBALS_H
+
+
 struct MemoryManagement {
   uint32_t data;
   uint32_t code;
@@ -13,3 +17,5 @@ struct PCB {
   int duration;
   struct MemoryManagement mm;
 }
+
+#endif
