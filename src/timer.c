@@ -8,17 +8,21 @@
 
 #include "../config/timer_globals.h"
 #include "../config/clock_globals.h"
+#include "../config/process_globals.h"
+#include "../config/signal_globals.h"
 
 void *create_timer(void *args) {
 
     struct Timer *defined_timer = (struct Timer *) args;
     
+    printf("A timer was created that send signals every %d seconds \n", defined_timer->signal_time );
+
     int second_counter = 0;
     int tick_counter = 0;
 
     pthread_mutex_lock(&clock_mutex);
 
-    while (1) {
+    while ( program_executing ) {
         
         done_timers += 1;
         tick_counter++;
@@ -29,6 +33,7 @@ void *create_timer(void *args) {
 
         if( second_counter == defined_timer -> signal_time ){
             printf("Timer %d has sent a signal at %d seconds \n", defined_timer -> id, second_counter );
+            create_process();
             second_counter = 0;
         }
 

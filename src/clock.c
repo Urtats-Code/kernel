@@ -8,6 +8,7 @@
 
 #include "../config/clock_globals.h"
 #include "../config/timer_globals.h"
+#include "../config/signal_globals.h"
 
 
 // Initialize extern variables
@@ -29,13 +30,12 @@ void *create_clock(void *args) {
     }
 
     int tick_interval_microseconds = 1000000 / defined_clock->simulating_hz;
-    int tick_counter = 0;
 
     printf("Clock ID %d created. Running at %d Hz.\n", defined_clock->id, defined_clock->simulating_hz);
 
     pthread_mutex_lock(&clock_mutex);
 
-    while (1) { 
+    while ( program_executing ) { 
 
         usleep(tick_interval_microseconds);
 
@@ -46,8 +46,6 @@ void *create_clock(void *args) {
 
         done_timers = 0;
         pthread_cond_broadcast(&free_timer_tick);
-
-        printf("Clock ID %d tick %d.\n", defined_clock->id, ++tick_counter);
 
     }
 

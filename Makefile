@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -std=c11 -pthread
 
 # Files 
-SRCS = ./src/clock.c  ./src/timer.c ./src/main.c 
+SRCS = ./src/process.c ./src/clock.c ./src/timer.c ./src/main.c  
 OBJS = $(SRCS:.c=.o)
 EXEC = kernel
 
