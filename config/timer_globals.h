@@ -1,7 +1,7 @@
 #ifndef TIMER_GLOBALS_H
 #define TIMER_GLOBALS_H
 
-#define TIMER_NUM 2
+#define TIMER_NUM 8
  
 
 /**

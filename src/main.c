@@ -34,17 +34,25 @@ int main(void) {
     printf("Clock thread started. I am doing other things. \n");
     
     for (int i = 0; i < TIMER_NUM; i++) {
-        
-        int duration_seconds = 1;
-        
-        struct Timer new_timer = { i, main_clock.simulating_hz, duration_seconds };
-        
-        if (pthread_create(&timers[i], NULL, create_timer, (void *) &new_timer ) != 0) {
-            perror("Failed to create timer thread");
-             cleanup_and_exit(0);
+        int duration_seconds = i + 1;
+
+        struct Timer *new_timer = malloc(sizeof(struct Timer));
+        if (new_timer == NULL) {
+            perror("Failed to allocate memory for Timer");
+            cleanup_and_exit(0);
             return 1;
         }
+        
+        new_timer->id = i;
+        new_timer->clock_hz = main_clock.simulating_hz;
+        new_timer->signal_time = duration_seconds;
 
+        if (pthread_create(&timers[i], NULL, create_timer, (void *) new_timer) != 0) {
+            perror("Failed to create timer thread");
+            free(new_timer); // Free allocated memory on failure
+            cleanup_and_exit(0);
+            return 1;
+        }
     }
 
      while (!terminate_flag) {
