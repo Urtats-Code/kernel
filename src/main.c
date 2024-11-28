@@ -12,6 +12,7 @@
 #include "../config/timer_globals.h"
 #include "../config/process_globals.h"
 #include "../config/signal_globals.h"
+#include "../config/pc_globals.h"
 
 // Global variables
 
@@ -19,6 +20,7 @@ pthread_t clock_thread;
 pthread_t timers[TIMER_NUM];
 volatile sig_atomic_t terminate_flag = 0; 
 int program_executing = 1;
+struct PC pc; 
 
 int main(void) {
     initialize_signal_handler();
@@ -49,16 +51,16 @@ int main(void) {
 
         if (pthread_create(&timers[i], NULL, create_timer, (void *) new_timer) != 0) {
             perror("Failed to create timer thread");
-            free(new_timer); // Free allocated memory on failure
+            free(new_timer); 
             cleanup_and_exit(0);
             return 1;
         }
     }
 
-     while (!terminate_flag) {
-        sleep(1);
-    }
+    pc = initialize_pc(); 
 
+     while (!terminate_flag) {
+    }
 
     printf("Main program is exiting.\n");
 
@@ -84,9 +86,13 @@ void cleanup_and_exit( int signum ){
     pthread_cancel(clock_thread);
     pthread_join(clock_thread, NULL);
 
-    printf("Freeing alocated memory. \n");
+    printf("Freeing alocated PCB memory. \n");
 
     free_all_pcbs();
+
+    printf("Freeing alocated PC memory. \n");
+
+    free_pc_memory( &pc );    
 
     printf("Cleaned up resources. Exiting program.\n");
     exit(signum); 

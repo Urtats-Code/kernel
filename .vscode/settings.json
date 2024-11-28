@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "unistd.h": "c",
-        "signal_globals.h": "c"
+        "signal_globals.h": "c",
+        "clock_globals.h": "c"
     }
 }
