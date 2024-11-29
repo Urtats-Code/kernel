@@ -37,7 +37,7 @@ void add_to_process_list( struct PCB *new_PCB ){
     new_PCB->next_PCB =  head_pcb;
     head_pcb = new_PCB;
 
-    print_process_list();
+    // print_process_list();
 
 } 
 

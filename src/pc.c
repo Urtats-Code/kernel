@@ -5,9 +5,9 @@
 // Configuration files
 #include "../config/pc_globals.h"
 
-int core_per_cpu[CPU_NUM];
+int core_per_cpu[CPU_NUM] = { 0, 0, 0, 0 };
 
-struct PC initialize_pc() {
+struct PC initialize_pc( void ) {
 
     struct PC pc;
     struct CPU* cpu_list;
@@ -34,8 +34,7 @@ struct CPU* initialize_cpus(int cpu_num) {
     fill_core_per_cpu();
 
     for (cpu_index = 0; cpu_index < cpu_num; cpu_index++) {
-
-        struct CPU* new_cpu = malloc( sizeof( struct CPU ) );
+        struct CPU* new_cpu = &cpu_list[cpu_index];
 
         new_cpu->id = cpu_index;
         new_cpu->core_num = core_per_cpu[cpu_index];
@@ -49,8 +48,6 @@ struct CPU* initialize_cpus(int cpu_num) {
 
 struct Core* initialize_cores(int core_num) {
     int core_index;
-
-
     struct Core* core_list = malloc(core_num * sizeof(struct Core));
 
     if (!core_list) {
@@ -59,8 +56,7 @@ struct Core* initialize_cores(int core_num) {
     }
 
     for (core_index = 0; core_index < core_num; core_index++) {
-
-        struct Core* new_core = malloc( sizeof( struct Core ) );
+        struct Core* new_core = &core_list[core_index];
 
         new_core->id = core_index;
         new_core->thread_list = NULL;
@@ -73,34 +69,52 @@ struct Core* initialize_cores(int core_num) {
 
 void fill_core_per_cpu(void) {
     for (int i = 0; i < CPU_NUM; i++) {
-        if (core_per_cpu[i] == 0) {
-            core_per_cpu[i] = BASE_CORE_NUM;
-        }
+        core_per_cpu[i] = BASE_CORE_NUM;
     }
 }
 
 
-void free_pc_memory( struct PC *pc ){
+void free_pc_memory(struct PC *pc) {
+    
+    int cpu_index;
 
-    int cpu_index, core_index; 
+    for (cpu_index = 0; cpu_index < pc->cpu_num; cpu_index++) {
+        struct CPU *current_cpu = &(pc->cpu_list[cpu_index]);
 
-    for( cpu_index = 0; cpu_index < pc -> cpu_num; cpu_index ++ ){
-        
-        struct CPU *current_cpu = &( pc -> cpu_list[ cpu_index ] ); 
-
-        for( core_index = 0; core_index <  current_cpu -> core_num; core_index ++ ){
-
-            struct Core *current_core = &( current_cpu -> core_list[ core_index ] );
-
-            free( current_core );
-
-        }
-
-        free( current_cpu -> core_list );
-        free( current_cpu );
+        free(current_cpu->core_list);
     }
 
-    free( pc -> cpu_list );
-    free( pc );
+    free(pc->cpu_list);
+    free(pc);
 
+}
+
+void print_core(struct Core *core, int core_count) {
+    printf("+---------+----------------+\n");
+    printf("| Core ID | Threads        |\n");
+    printf("+---------+----------------+\n");
+    for (int i = 0; i < core_count; i++) {
+        printf("| %7d | %s\n", core[i].id, core[i].thread_list ? "Available" : "None  %7d |");
+    }
+    printf("+---------+----------------+\n");
+}
+
+void print_cpu(struct CPU *cpu, int cpu_count) {
+    printf("+-------+-------------------+\n");
+    printf("| CPU ID | Number of Cores  |\n");
+    printf("+-------+-------------------+\n");
+    for (int i = 0; i < cpu_count; i++) {
+        printf("| %5d | %17d |\n", cpu[i].id, cpu[i].core_num);
+        print_core(cpu[i].core_list, cpu[i].core_num);
+    }
+    printf("+-------+-------------------+\n");
+}
+
+void print_pc(struct PC *pc) {
+    printf("+-------+-------------------+\n");
+    printf("| PC ID | Number of CPUs    |\n");
+    printf("+-------+-------------------+\n");
+    printf("| %5d | %17d |\n", pc->id, pc->cpu_num);
+    printf("+-------+-------------------+\n");
+    print_cpu(pc->cpu_list, pc->cpu_num);
 }

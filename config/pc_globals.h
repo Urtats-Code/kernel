@@ -1,5 +1,5 @@
-#ifndef CLOCK_GLOBALS_H
-#define CLOCK_GLOBALS_H
+#ifndef PC_GLOBALS
+#define PC_GLOBALS
 
 #define CPU_NUM 4
 #define BASE_CORE_NUM 4 
@@ -24,7 +24,7 @@ struct Core {
 
 // Core functions
 
-struct PC initialize_pc();
+struct PC initialize_pc(void);
 struct CPU* initialize_cpus(int cpu_num);
 struct Core* initialize_cores(int core_num);
 
@@ -32,6 +32,10 @@ struct Core* initialize_cores(int core_num);
 
 void fill_core_per_cpu(void);
 void free_pc_memory( struct PC *pc );
+
+void print_core(struct Core *core, int core_count);
+void print_cpu(struct CPU *cpu, int cpu_count);
+void print_pc(struct PC *pc);
 
 
 #endif

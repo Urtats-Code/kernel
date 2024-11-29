@@ -57,7 +57,13 @@ int main(void) {
         }
     }
 
+    printf("-------------- \n");
+    printf("PC Configuration \n");
+    
     pc = initialize_pc(); 
+    print_pc( &pc );
+
+    printf("-------------- \n");
 
      while (!terminate_flag) {
     }
