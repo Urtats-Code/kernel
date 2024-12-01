@@ -15,7 +15,7 @@ void *create_timer(void *args) {
 
     struct Timer *defined_timer = (struct Timer *) args;
     
-    printf("A timer was created that send signals every %d seconds \n", defined_timer->signal_time );
+    // printf("A timer was created that send signals every %d seconds \n", defined_timer->signal_time );
 
     int second_counter = 0;
     int tick_counter = 0;
@@ -32,7 +32,7 @@ void *create_timer(void *args) {
         }
 
         if( second_counter == defined_timer -> signal_time ){
-            printf("Timer %d has sent a signal at %d seconds \n", defined_timer -> id, second_counter );
+            // printf("Timer %d has sent a signal at %d seconds \n", defined_timer -> id, second_counter );
             create_process();
             second_counter = 0;
         }

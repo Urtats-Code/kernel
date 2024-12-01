@@ -57,16 +57,16 @@ int main(void) {
         }
     }
 
-    printf("-------------- \n");
-    printf("PC Configuration \n");
-    
+    // printf("-------------- \n");
+    // printf("PC Configuration \n");
+
     pc = initialize_pc(); 
-    print_pc( &pc );
 
-    printf("-------------- \n");
+    // print_pc( &pc );
 
-     while (!terminate_flag) {
-    }
+    // printf("-------------- \n");
+
+    while (!terminate_flag) {}
 
     printf("Main program is exiting.\n");
 

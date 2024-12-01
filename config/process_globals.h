@@ -2,7 +2,17 @@
 #define PROCESS_GLOBALS_H
 
 #define MAX_PROCESS_DURATION 20
-#define MIN_PROCESS_DURATION 5 
+#define MIN_PROCESS_DURATION 5
+
+// This line defines how much quantum each process gets when it's created 
+// Recomendation: 
+// - Time sensitve systmes: 10 - 20 ms 
+// - Throughput oriented  systmes: 50 - 100 ms 
+#define QUANTUM_TIME 10
+
+#define RR 0 
+#define SFJ 1 
+#define POLICY RR 
 
 extern int last_pid; 
 
@@ -36,6 +46,11 @@ struct PCB create_new_PCB( void );
 void print_process_list( void );
 void free_all_pcbs( void );
 
+// Sorting 
+
+struct PCB *sort_process_list_by_duration( struct PCB *head );
+struct PCB *merge( struct PCB *first, struct PCB *second );
+struct PCB *split( struct PCB *head );
 
 #endif
 

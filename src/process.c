@@ -27,7 +27,11 @@ void *create_process( void ) {
     }
 
     *new_PCB = create_new_PCB(); 
+
+    
     add_to_process_list( new_PCB );
+    
+
 
     return NULL;
 }
@@ -37,7 +41,11 @@ void add_to_process_list( struct PCB *new_PCB ){
     new_PCB->next_PCB =  head_pcb;
     head_pcb = new_PCB;
 
-    // print_process_list();
+    if( POLICY == SFJ ){
+         head_pcb =  sort_process_list_by_duration( head_pcb );
+    }
+
+    print_process_list();
 
 } 
 
@@ -48,7 +56,7 @@ struct PCB create_new_PCB( void ) {
     int pid      = last_pid++; 
     int state    = 0; 
     int priority = 0; 
-    int quantum  = 0; 
+    int quantum  = QUANTUM_TIME; 
     int duration = MIN_PROCESS_DURATION + (rand() % ( MAX_PROCESS_DURATION - MIN_PROCESS_DURATION )); // Simple formula to generate numbers in between a range
 
     struct PCB new_PCB = { pid, state, priority, quantum, duration, NULL, NULL }; 
@@ -89,5 +97,62 @@ void print_process_list( void ) {
 
         current = current->next_PCB; 
     }
+
+}
+
+struct PCB *sort_process_list_by_duration( struct PCB *head ) { 
+
+      
+    if (head == NULL || head->next_PCB == NULL)
+        return head;
+
+    struct PCB *second = split(head);
+
+    head = sort_process_list_by_duration(head);
+    second = sort_process_list_by_duration(second);
+
+    return merge(head, second);
+
+}
+
+struct PCB *merge( struct PCB *first, struct PCB *second ) { 
+
+    
+    if (first == NULL) return second;
+    if (second == NULL) return first;
+
+    
+    if (first->duration < second->duration) {     
+        first->next_PCB = merge(first->next_PCB, second);
+        return first;        
+    } else {
+        second->next_PCB = merge(first, second->next_PCB);
+        return second;
+    }
+
+    return NULL; 
+
+}
+
+struct PCB *split( struct PCB *head ) { 
+
+    struct PCB *fast = head;
+    struct PCB *slow = head;
+
+
+    while (fast != NULL && fast->next_PCB != NULL) {
+
+        fast = fast->next_PCB->next_PCB;
+
+        if (fast != NULL) {
+            slow = slow->next_PCB;
+        }
+    }
+
+    
+    struct PCB *temp = slow->next_PCB;
+    slow->next_PCB = NULL;
+    return temp;
+
 
 }
