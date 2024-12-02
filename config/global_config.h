@@ -13,8 +13,8 @@
 
 // Scheduler policy usage
 #define RR 0 
-#define SFJ 1 
-#define POLICY SFJ
+#define SJF 1 
+#define POLICY SJF
 
 // PC simulation configuration
 #define CPU_NUM 4

@@ -41,7 +41,7 @@ void add_to_process_list( struct PCB *new_PCB ){
     new_PCB->next_PCB =  head_pcb;
     head_pcb = new_PCB;
 
-    if( POLICY == SFJ ){
+    if( POLICY == SJF ){
          head_pcb =  sort_process_list_by_duration( head_pcb );
     }
 

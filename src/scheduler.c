@@ -91,7 +91,7 @@ void schedule_with( struct PC *pc, int( *callback ) ( struct Thread *thread ) ){
 
 void schedule_process( void ) {
 
-    if( POLICY == SFJ ){
+    if( POLICY == SJF ){
         schedule_with( &pc, policy_RR ); 
     }
 
