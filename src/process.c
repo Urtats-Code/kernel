@@ -45,7 +45,10 @@ void add_to_process_list( struct PCB *new_PCB ){
          head_pcb =  sort_process_list_by_duration( head_pcb );
     }
 
-    print_process_list();
+    if( SHOW_PROCESS_LIST ){
+        print_process_list();
+    }
+
 
 } 
 
@@ -67,28 +70,33 @@ struct PCB create_new_PCB( void ) {
 
 
 
-struct PCB *get_process_list_head( void ){ 
-
-    if (head_pcb == NULL) return NULL;
-
-    struct PCB *prev_pcb = head_pcb; 
-    struct PCB *temp_head = prev_pcb -> next_PCB; 
-
-    if( prev_pcb -> next_PCB == NULL ){
-        head_pcb = NULL; 
-        return prev_pcb; 
+struct PCB *get_process_list_head(void) { 
+    
+    if (head_pcb == NULL) {
+        return NULL;  
     }
 
-    while( temp_head -> next_PCB != NULL ){
-        prev_pcb = temp_head; 
-        temp_head = temp_head -> next_PCB; 
+    struct PCB *prev_pcb = head_pcb;
+    struct PCB *current = head_pcb->next_PCB;
+
+    
+    if (current == NULL) {
+        head_pcb = NULL;
+        return prev_pcb;  
     }
 
+    
+    while (current->next_PCB != NULL) {
+        prev_pcb = current;
+        current = current->next_PCB;
+    }
 
-    prev_pcb -> next_PCB = NULL; 
+    
+    prev_pcb->next_PCB = NULL;
 
-    return prev_pcb;
+    return current;  
 }
+
 
 void free_all_pcbs( void ) {
 
@@ -125,10 +133,8 @@ void print_process_list( void ) {
     }
 
 }
-
-struct PCB *sort_process_list_by_duration( struct PCB *head ) { 
-
-      
+struct PCB *sort_process_list_by_duration(struct PCB *head) { 
+ 
     if (head == NULL || head->next_PCB == NULL)
         return head;
 
@@ -138,49 +144,35 @@ struct PCB *sort_process_list_by_duration( struct PCB *head ) {
     second = sort_process_list_by_duration(second);
 
     return merge(head, second);
-
 }
 
-struct PCB *merge( struct PCB *first, struct PCB *second ) { 
-
-    
+struct PCB *merge(struct PCB *first, struct PCB *second) { 
     if (first == NULL) return second;
     if (second == NULL) return first;
 
-    
-    if (first->duration < second->duration) {     
+    if (first->duration > second->duration) {     
         first->next_PCB = merge(first->next_PCB, second);
         return first;        
     } else {
         second->next_PCB = merge(first, second->next_PCB);
         return second;
     }
-
-    return NULL; 
-
 }
 
-struct PCB *split( struct PCB *head ) { 
-
+struct PCB *split(struct PCB *head) { 
     struct PCB *fast = head;
     struct PCB *slow = head;
 
-
     while (fast != NULL && fast->next_PCB != NULL) {
-
         fast = fast->next_PCB->next_PCB;
-
         if (fast != NULL) {
             slow = slow->next_PCB;
         }
     }
 
-    
     struct PCB *temp = slow->next_PCB;
     slow->next_PCB = NULL;
     return temp;
-
-
 }
 
 

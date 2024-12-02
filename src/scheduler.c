@@ -31,14 +31,21 @@ int policy_RR( struct Thread *thread ){
         thread -> pcb -> duration --;
         thread -> pcb -> quantum --;
 
-        printf("REDUCING FOR TIMER: \n");
 
-        printf("%d\t%d\t%d\t\t%d\t%d\n",
-               thread-> pcb ->pid,
-               thread-> pcb ->state,
-               thread-> pcb ->priority,
-               thread-> pcb ->quantum,
-               thread-> pcb ->duration);
+        if( SHOW_THREAD_SCHEDULE_PROCESS ){
+
+
+            printf(" At thread %d \n", thread -> id );
+            printf(" PID | STATE | PRIORITY | QUANTUM | DURATION \n");
+            printf("%d\t%d\t%d\t\t%d\t%d\n",
+                   thread-> pcb ->pid,
+                   thread-> pcb ->state,
+                   thread-> pcb ->priority,
+                   thread-> pcb ->quantum,
+                   thread-> pcb ->duration);
+
+        }
+
 
         if( thread -> pcb -> duration <= 0 ){  // Execution finished 
             thread -> free = 1; 
@@ -57,10 +64,6 @@ int policy_RR( struct Thread *thread ){
 
 }
 
-void policy_SFJ( struct Thread *thread ) { 
-
-
-} 
 
 void schedule_with( struct PC *pc, int( *callback ) ( struct Thread *thread ) ){
 
@@ -89,7 +92,7 @@ void schedule_with( struct PC *pc, int( *callback ) ( struct Thread *thread ) ){
 void schedule_process( void ) {
 
     if( POLICY == SFJ ){
-        // schedule_with( &pc, policy_SFJ ); 
+        schedule_with( &pc, policy_RR ); 
     }
 
     if( POLICY == RR ){

@@ -1,8 +1,9 @@
+#include "global_config.h"
+
 #ifndef TIMER_GLOBALS_H
 #define TIMER_GLOBALS_H
 
-#define TIMER_NUM 8
- 
+
 
 /**
  * @brief Timer struct

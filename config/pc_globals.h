@@ -1,11 +1,8 @@
+#include "global_config.h"
+
 #ifndef PC_GLOBALS
 #define PC_GLOBALS
 
-#define CPU_NUM 4
-#define BASE_CORE_NUM 4 
-#define BASE_THREAD_NUM 4
-
-#define SHOW_PC_CONFIG 0
 
 extern struct PC pc; 
 

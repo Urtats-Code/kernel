@@ -38,9 +38,10 @@ int main(void) {
 
     printf("Clock thread started. I am doing other things. \n");
     
+    int duration_seconds = 1;
+    
     for (int i = 0; i < TIMER_NUM; i++) {
 
-        int duration_seconds = i + 1;
 
         struct Timer *new_timer = malloc(sizeof(struct Timer));
         if (new_timer == NULL) {
@@ -54,6 +55,8 @@ int main(void) {
         new_timer->signal_time = duration_seconds;
 
         if( new_timer -> signal_time == 1 ){
+
+            duration_seconds = 3;
 
             if (pthread_create(&timers[i], NULL, create_scheduler_timer, (void *) new_timer) != 0) {
                 perror("Failed to create timer thread");

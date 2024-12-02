@@ -13,6 +13,7 @@
 #include "../config/scheduler_globlas.h"
 
 
+
 void *create_timer(void *args) {
 
     struct Timer *defined_timer = (struct Timer *) args;
@@ -34,8 +35,13 @@ void *create_timer(void *args) {
         }
 
         if( second_counter == defined_timer -> signal_time ){
-            printf("Timer %d has sent a signal at %d seconds \n", defined_timer -> id, second_counter );
+    
+            if( SHOW_WHEN_PROCESS_IS_CREATED ){
+                printf("A process was created: \n");
+            }
+            
             create_process();
+
             second_counter = 0;
         }
 
@@ -76,7 +82,11 @@ void *create_scheduler_timer(void *args) {
         }
 
         if( second_counter == defined_timer -> signal_time ){
-            printf("Program SCHEDULING \n" );
+
+            if( SHOW_WHEN_TIMER_SCHEDULES ){
+                printf("Scheduling happened: \n");
+            }
+
             schedule_process(); 
             second_counter = 0;
         }

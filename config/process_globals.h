@@ -1,18 +1,8 @@
+#include "global_config.h"
+
 #ifndef PROCESS_GLOBALS_H
 #define PROCESS_GLOBALS_H
 
-#define MAX_PROCESS_DURATION 20
-#define MIN_PROCESS_DURATION 5
-
-// This line defines how much quantum each process gets when it's created 
-// Recomendation: 
-// - Time sensitve systmes: 10 - 20 ms 
-// - Throughput oriented  systmes: 50 - 100 ms 
-#define QUANTUM_TIME 10
-
-#define RR 0 
-#define SFJ 1 
-#define POLICY RR
 
 extern int last_pid; 
 
