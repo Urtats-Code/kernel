@@ -31,7 +31,7 @@ int policy_RR( struct Thread *thread ){
         thread -> pcb -> duration --;
         thread -> pcb -> quantum --;
 
-        print_process_list();
+        printf("REDUCING FOR TIMER: \n");
 
         printf("%d\t%d\t%d\t\t%d\t%d\n",
                thread-> pcb ->pid,
@@ -40,11 +40,11 @@ int policy_RR( struct Thread *thread ){
                thread-> pcb ->quantum,
                thread-> pcb ->duration);
 
-        if( thread -> pcb -> duration == 0 ){  // Execution finished 
+        if( thread -> pcb -> duration <= 0 ){  // Execution finished 
             thread -> free = 1; 
             return 0; 
         } 
-        else if ( thread -> pcb -> quantum == 0 ){
+        else if ( thread -> pcb -> quantum <= 0 ){
             thread -> free = 1; 
             thread -> pcb -> quantum = QUANTUM_TIME;
             add_to_process_list( thread -> pcb );
