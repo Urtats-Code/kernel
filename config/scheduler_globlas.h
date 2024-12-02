@@ -12,6 +12,7 @@ struct Thread;
 
 void schedule_process( void ); 
 int policy_RR(struct Thread *thread); 
+int policy_SJF( struct Thread *thread );
 void schedule_with(struct PC *pc, int (*callback)(struct Thread *thread)); 
 
 #endif
