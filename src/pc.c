@@ -13,7 +13,6 @@ struct PC initialize_pc( void ) {
     struct PC pc;
     struct CPU* cpu_list;
 
-
     cpu_list = initialize_cpus(CPU_NUM);
 
     pc.cpu_num = CPU_NUM;   
@@ -71,7 +70,7 @@ struct Core* initialize_cores(int core_num) {
 struct Thread* initialize_threads( int thread_num ){
 
     int thread_index;
-    struct Thread* thread_list = malloc(thread_num * sizeof(struct Core));
+    struct Thread* thread_list = malloc(thread_num * sizeof(struct Thread));
 
     if (!thread_list) {
         perror("Failed to allocate memory for Thread list");
@@ -83,7 +82,7 @@ struct Thread* initialize_threads( int thread_num ){
         struct Thread* new_hardware_thread = &thread_list[ thread_index ]; 
 
         new_hardware_thread -> id = thread_index; 
-        new_hardware_thread -> free = 0; 
+        new_hardware_thread -> free =  1; 
         new_hardware_thread -> PC   = -1; 
         new_hardware_thread -> IR   = -1; 
         new_hardware_thread -> PTBR = -1; 

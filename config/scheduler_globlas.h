@@ -11,8 +11,8 @@ struct PC;
 struct Thread;
 
 void schedule_process( void ); 
-void policy_RR(struct Thread *thread); 
+int policy_RR(struct Thread *thread); 
 void policy_SFJ(struct Thread *thread); 
-void schedule_with(struct PC *pc, void (*callback)(struct Thread *thread)); 
+void schedule_with(struct PC *pc, int (*callback)(struct Thread *thread)); 
 
 #endif

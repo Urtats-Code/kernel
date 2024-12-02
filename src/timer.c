@@ -12,6 +12,8 @@
 #include "../config/signal_globals.h"
 #include "../config/scheduler_globlas.h"
 
+int just_once = 1; 
+
 void *create_timer(void *args) {
 
     struct Timer *defined_timer = (struct Timer *) args;
@@ -34,8 +36,10 @@ void *create_timer(void *args) {
 
         if( second_counter == defined_timer -> signal_time ){
             printf("Timer %d has sent a signal at %d seconds \n", defined_timer -> id, second_counter );
-            create_process();
-            // schedule_process(); 
+            if( just_once ){
+                just_once = 0;
+                create_process();
+            }
             second_counter = 0;
         }
 
@@ -76,7 +80,7 @@ void *create_scheduler_timer(void *args) {
         }
 
         if( second_counter == defined_timer -> signal_time ){
-            // printf("Timer %d has sent a signal at %d seconds \n", defined_timer -> id, second_counter );
+            printf("Program SCHEDULING \n" );
             schedule_process(); 
             second_counter = 0;
         }

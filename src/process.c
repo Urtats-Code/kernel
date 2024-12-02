@@ -74,9 +74,16 @@ struct PCB *get_process_list_head( void ){
     struct PCB *prev_pcb = head_pcb; 
     struct PCB *temp_head = prev_pcb -> next_PCB; 
 
-    while( temp_head != NULL ){
+    if( prev_pcb -> next_PCB == NULL ){
+        head_pcb = NULL; 
+        return prev_pcb; 
+    }
+
+    while( temp_head -> next_PCB != NULL ){
+        prev_pcb = temp_head; 
         temp_head = temp_head -> next_PCB; 
     }
+
 
     prev_pcb -> next_PCB = NULL; 
 
@@ -175,4 +182,5 @@ struct PCB *split( struct PCB *head ) {
 
 
 }
+
 

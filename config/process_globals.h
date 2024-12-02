@@ -12,7 +12,7 @@
 
 #define RR 0 
 #define SFJ 1 
-#define POLICY RR  
+#define POLICY RR
 
 extern int last_pid; 
 
