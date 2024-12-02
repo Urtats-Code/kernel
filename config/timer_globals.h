@@ -22,6 +22,7 @@ struct Timer {
  * @return void 
  */
 void *create_timer( void *args ); 
+void *create_scheduler_timer( void *args ); 
 
 #endif
 

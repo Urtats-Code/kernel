@@ -56,15 +56,18 @@ int main(void) {
             return 1;
         }
     }
-
-    // printf("-------------- \n");
-    // printf("PC Configuration \n");
-
+    
     pc = initialize_pc(); 
 
-    // print_pc( &pc );
+    if( SHOW_PC_CONFIG ){
 
-    // printf("-------------- \n");
+        printf("-------------- \n");
+        printf("PC Configuration \n");
+        print_pc( &pc );
+        printf("-------------- \n");
+        
+    }
+
 
     while (!terminate_flag) {}
 

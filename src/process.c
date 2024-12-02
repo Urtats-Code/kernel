@@ -65,6 +65,24 @@ struct PCB create_new_PCB( void ) {
 
 }
 
+
+
+struct PCB *get_process_list_head( void ){ 
+
+    if (head_pcb == NULL) return NULL;
+
+    struct PCB *prev_pcb = head_pcb; 
+    struct PCB *temp_head = prev_pcb -> next_PCB; 
+
+    while( temp_head != NULL ){
+        temp_head = temp_head -> next_PCB; 
+    }
+
+    prev_pcb -> next_PCB = NULL; 
+
+    return prev_pcb;
+}
+
 void free_all_pcbs( void ) {
 
     struct PCB *current = head_pcb;
@@ -77,6 +95,7 @@ void free_all_pcbs( void ) {
 
     head_pcb = NULL;
 }
+
 
 
 void print_process_list( void ) {
@@ -156,3 +175,4 @@ struct PCB *split( struct PCB *head ) {
 
 
 }
+

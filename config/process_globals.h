@@ -12,7 +12,7 @@
 
 #define RR 0 
 #define SFJ 1 
-#define POLICY RR 
+#define POLICY RR  
 
 extern int last_pid; 
 
@@ -43,9 +43,9 @@ void add_to_process_list( struct PCB *new_PCB );
 // Auxiliary functions 
 
 struct PCB create_new_PCB( void ); 
+struct PCB *get_process_list_head( void );
 void print_process_list( void );
 void free_all_pcbs( void );
-
 // Sorting 
 
 struct PCB *sort_process_list_by_duration( struct PCB *head );
