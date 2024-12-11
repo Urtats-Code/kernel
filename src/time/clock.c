@@ -6,9 +6,9 @@
 
 // Configuration files
 
-#include "../config/clock_globals.h"
-#include "../config/timer_globals.h"
-#include "../config/signal_globals.h"
+#include "../../config/clock_globals.h"
+#include "../../config/timer_globals.h"
+#include "../../config/signal_globals.h"
 
 
 // Initialize extern variables
@@ -31,7 +31,19 @@ void *create_clock(void *args) {
 
     int tick_interval_microseconds = 1000000 / defined_clock->simulating_hz;
 
-    printf("Clock ID %d created. Running at %d Hz.\n", defined_clock->id, defined_clock->simulating_hz);
+    if( SHOW_CLOCK_CONFIG ){
+
+        printf("==============================================\n");
+        printf("|            Clock Information               |\n");
+        printf("==============================================\n");
+
+        printf("| %-20s | %10d |\n", "Clock ID", defined_clock -> id );
+        printf("| %-20s | %10d Hz |\n", "Frequency", defined_clock -> simulating_hz );
+
+        printf("==============================================\n");
+        
+    }
+
 
     pthread_mutex_lock(&clock_mutex);
 

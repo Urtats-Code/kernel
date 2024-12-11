@@ -6,11 +6,11 @@
 
 // Configuration files
 
-#include "../config/timer_globals.h"
-#include "../config/clock_globals.h"
-#include "../config/process_globals.h"
-#include "../config/signal_globals.h"
-#include "../config/scheduler_globlas.h"
+#include "../../config/timer_globals.h"
+#include "../../config/clock_globals.h"
+#include "../../config/process_globals.h"
+#include "../../config/signal_globals.h"
+#include "../../config/scheduler_globlas.h"
 
 
 

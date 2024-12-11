@@ -21,13 +21,25 @@
 #define BASE_CORE_NUM 4 
 #define BASE_THREAD_NUM 4
 
+// Memory configuraiton
+
+#define PAGE_SIZE 4             //  KB 
+#define PHYSICAL_MEMORY_SIZE 64 //  MB
+#define VIRTUAL_ADDRESS_SIZE 32 //  bit 
+
+#define SECONDARY_STORAGE_ROOT "../../secondary_storage/" // USE ABSOLUTE ROOT, OR BASED ON THE POSITION ON THE loader.c FILE LOCATION
+
 
 // Info visualization
 #define SHOW_PC_CONFIG 0
 #define SHOW_WHEN_TIMER_SCHEDULES 0
 #define SHOW_WHEN_PROCESS_IS_CREATED 0 
-#define SHOW_THREAD_SCHEDULE_PROCESS 1
-#define SHOW_PROCESS_LIST 1
+#define SHOW_THREAD_SCHEDULE_PROCESS 0
+#define SHOW_PROCESS_LIST 0
+#define SHOW_CLOCK_CONFIG 0
+#define SHOW_MEMORY_CONFIG 1
+
+
 
 
 #endif

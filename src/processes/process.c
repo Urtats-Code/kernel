@@ -7,7 +7,7 @@
 
 // Configuration files
 
-#include "../config/process_globals.h"
+#include "../../config/process_globals.h"
 
 // Initialize extern variables
 

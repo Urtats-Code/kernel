@@ -3,9 +3,14 @@ CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -std=c11 -pthread
 
 # Files 
-SRCS =  ./src/pc.c ./src/process.c ./src/scheduler.c ./src/clock.c ./src/timer.c ./src/main.c 
-OBJS = $(SRCS:.c=.o)
-EXEC = kernel
+TIME_SRCS      	= ./src/time/clock.c ./src/time/timer.c
+PROCESS_SRCS   	= ./src/processes/process.c
+PC_SRCS        	= ./src/pc/CPU/pc.c
+LOADER_SRCS    	= ./src/pc/memory/loader.c
+MEMORY_SRCS    	=  ./src/pc/memory/calculations.c ./src/pc/memory/physical_mem.c ./src/pc/memory/virtual_mem.c ./src/pc/memory/physical_virtual_memory.c  
+SRCS           	= $(PC_SRCS) $(MEMORY_SRCS) $(LOADER_SRCS) $(PROCESS_SRCS) $(TIME_SRCS) ./src/scheduling/scheduler.c ./src/main.c
+OBJS 			= $(SRCS:.c=.o)
+EXEC 			= kernel
 
 all: $(EXEC)
 

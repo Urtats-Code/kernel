@@ -1,10 +1,11 @@
+// Libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 // Configuration files
-#include "../config/pc_globals.h"
-#include "../config/thread_globals.h"
+#include "../../../config/pc_globals.h"
+#include "../../../config/thread_globals.h"
 
 int core_per_cpu[CPU_NUM] = { 0, 0, 0, 0 };
 
@@ -108,14 +109,21 @@ void free_pc_memory(struct PC *pc) {
     
     int cpu_index;
 
+
     for (cpu_index = 0; cpu_index < pc->cpu_num; cpu_index++) {
         struct CPU *current_cpu = &(pc->cpu_list[cpu_index]);
 
-        free(current_cpu->core_list);
+        if (current_cpu->core_list) {
+            free(current_cpu->core_list);
+            current_cpu->core_list = NULL;
+        }
     }
 
-    free(pc->cpu_list);
-    free(pc);
+
+    if (pc->cpu_list) {
+        free(pc->cpu_list);
+        pc->cpu_list = NULL;
+    }
 
 }
 
@@ -149,3 +157,4 @@ void print_pc(struct PC *pc) {
     printf("| %5d | %d |\n", pc->id, pc->cpu_num);
     print_cpu(pc->cpu_list, pc->cpu_num);
 }
+

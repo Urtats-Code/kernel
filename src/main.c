@@ -13,6 +13,7 @@
 #include "../config/process_globals.h"
 #include "../config/signal_globals.h"
 #include "../config/pc_globals.h"
+#include "../config/memory_globals.h"
 
 // Global variables
 
@@ -23,7 +24,11 @@ int program_executing = 1;
 struct PC pc; 
 
 int main(void) {
+    
     initialize_signal_handler();
+    physical_virtual_memory_mapping_calculations();
+
+    create_load_process( "some_file.h" );
 
     pc = initialize_pc(); 
 
@@ -125,6 +130,10 @@ void cleanup_and_exit( int signum ){
     printf("Freeing alocated PC memory. \n");
 
     free_pc_memory( &pc );    
+
+    printf("Freeing alocated simulated Virtual / Physical memory . \n");
+
+    free_physical_virtual_memory();
 
     printf("Cleaned up resources. Exiting program.\n");
     exit(signum); 

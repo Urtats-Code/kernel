@@ -6,10 +6,10 @@
 
 // Configuration files
 
-#include "../config/scheduler_globlas.h"
-#include "../config/process_globals.h"
-#include "../config/thread_globals.h"
-#include "../config/pc_globals.h"
+#include "../../config/scheduler_globlas.h"
+#include "../../config/process_globals.h"
+#include "../../config/thread_globals.h"
+#include "../../config/pc_globals.h"
 
 int policy_RR( struct Thread *thread ){ 
 

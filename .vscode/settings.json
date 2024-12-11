@@ -3,6 +3,9 @@
         "unistd.h": "c",
         "signal_globals.h": "c",
         "clock_globals.h": "c",
-        "__config": "c"
+        "__config": "c",
+        "timer_globals.h": "c",
+        "process_globals.h": "c",
+        "memory_globals.h": "c"
     }
 }

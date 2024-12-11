@@ -7,7 +7,7 @@
 extern int last_pid; 
 
 
-struct MemoryManagement {
+struct MM {
   uint32_t data;
   uint32_t code;
   uint32_t pgb;
@@ -19,7 +19,7 @@ struct PCB {
   int priority;
   int quantum;
   int duration;
-  struct MemoryManagement *mm;
+  struct MM *mm;
   struct PCB *next_PCB; 
 };
 
