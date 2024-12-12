@@ -44,7 +44,12 @@ void free_physical_virtual_memory( void ) {
 
     free( virtual_memory -> page_table -> entries );
     free( virtual_memory -> page_table );
-    free( physical_memory -> frame_list );
+
+    for( int frame = 0 ; frame < physical_memory -> frame_num ; frame ++ ){
+        free( physical_memory -> frame_list[frame].data_arr );
+    }
+
+    free( physical_memory -> frame_list );    
     free( virtual_memory );
     free( physical_memory );
 
