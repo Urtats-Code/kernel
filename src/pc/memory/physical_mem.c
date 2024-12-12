@@ -48,7 +48,14 @@ void initialize_physical_memory( void ) {
 
         physical_memory -> frame_list[i].id             = i;  
         physical_memory -> frame_list[i].is_occupied    = 0; 
-        physical_memory -> frame_list[i].page_num       = -1;   
+        physical_memory -> frame_list[i].page_num       = -1; 
+        physical_memory -> frame_list[i].data_arr       = (uint8_t *) malloc( PAGE_SIZE * sizeof(int) );
+
+        // Fill the frame with 0s 
+        for (int j = 0; j < PAGE_SIZE; j++) {
+            physical_memory -> frame_list[i].data_arr[j] = 0;
+        }
+
 
     }
 

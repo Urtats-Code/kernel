@@ -11,6 +11,7 @@ struct Frame {
     int id;            
     int is_occupied;   
     int page_num;      
+    uint8_t *data_arr;              // Each position of the array is 1 Byte, this means it's value can go from 0 255 
 };
 
 struct PhysicalMemory { 
