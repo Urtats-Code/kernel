@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <math.h>
 
 // Config files 
@@ -40,23 +41,13 @@ void create_physical_memory( int frame_num ) {
 
 void initialize_physical_memory( void ) { 
 
-    int i;
+    physical_memory -> memory_list = malloc( sizeof( uint8_t ) * physical_memory -> frame_num   * PAGE_SIZE * KB ); // Memory is represented as an arrya of bytes
 
-    physical_memory -> frame_list = ( struct Frame * ) malloc( physical_memory -> frame_num * sizeof( struct Frame ) );
-
-    for ( i = 0; i < physical_memory -> frame_num; i++ ) {
-
-        physical_memory -> frame_list[i].id             = i;  
-        physical_memory -> frame_list[i].is_occupied    = 0; 
-        physical_memory -> frame_list[i].page_num       = -1; 
-        physical_memory -> frame_list[i].data_arr       = (uint8_t *) malloc( PAGE_SIZE * sizeof(int) );
-
-        // Fill the frame with 0s 
-        for (int j = 0; j < PAGE_SIZE; j++) {
-            physical_memory -> frame_list[i].data_arr[j] = 0;
-        }
-
-
+    if (physical_memory->memory_list == NULL) {
+        fprintf(stderr, "Failed to allocate physical memory\n");
+        exit(EXIT_FAILURE);
     }
+
+    memset(physical_memory->memory_list, 0, physical_memory -> frame_num *  PAGE_SIZE * KB );
 
 }

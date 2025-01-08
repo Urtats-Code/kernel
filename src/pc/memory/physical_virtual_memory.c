@@ -13,7 +13,9 @@ void physical_virtual_memory_mapping_calculations( void ){
     int offset = calculate_offset(); 
     int page_num = VIRTUAL_ADDRESS_SIZE - offset;
     int physical_memory_bits = calculate_physical_memory_bits();
-    int frame_num = physical_memory_bits - offset; 
+    int frame_num = calculate_frame_num();
+
+    
 
     if( SHOW_MEMORY_CONFIG ){
 
@@ -45,11 +47,7 @@ void free_physical_virtual_memory( void ) {
     free( virtual_memory -> page_table -> entries );
     free( virtual_memory -> page_table );
 
-    for( int frame = 0 ; frame < physical_memory -> frame_num ; frame ++ ){
-        free( physical_memory -> frame_list[frame].data_arr );
-    }
-
-    free( physical_memory -> frame_list );    
+    free( physical_memory -> memory_list );    
     free( virtual_memory );
     free( physical_memory );
 

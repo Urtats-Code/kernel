@@ -1,5 +1,8 @@
 // Libraries 
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 // Config files 
 #include "global_config.h"
@@ -7,17 +10,22 @@
 #ifndef MEMORY_GLOBALS_H
 #define MEMORY_GLOBALS_H
 
-struct Frame {
-    int id;            
-    int is_occupied;   
-    int page_num;      
-    uint8_t *data_arr;              // Each position of the array is 1 Byte, this means it's value can go from 0 255 
+#define KB 1024
+
+struct EmptySpace { 
+    void* start_address; 
+    long available_space; 
+    struct EmptySpace *next; 
+};
+
+struct MemoryAllocator { 
+    struct EmptySpace *free_list; 
 };
 
 struct PhysicalMemory { 
     int frame_num;              
     int memory_size_MB;         
-    struct Frame *frame_list; 
+    uint8_t *memory_list;       // Each position of the array is 1 Byte, this means it's value can go from 0 255 
 };
 
 struct PageTableEntry {
@@ -49,6 +57,7 @@ extern struct VirtualMemory     *virtual_memory;
 
 int calculate_offset(void);
 int calculate_physical_memory_bits(void);
+int calculate_frame_num(void);
 
 // Physical Memory Function Prototypes
 
@@ -67,5 +76,17 @@ void create_load_process(char *file_name);
 // Utils 
 
 void free_physical_virtual_memory( void );
+void print_virtual_memory_state(void);
+void print_physical_memory_state(void);
+void print_file_loading_info(const char *file_name, long file_size);
+void print_loading_error_state(long bytes_loaded, long total_bytes);
+
+
+// long get_file_size(FILE *file);
+int find_free_frame(void);
+void load_file_into_memory(const char *file_name);
+int map_page_to_frame(int page_num, int frame_num);
+void read_file_chunk(FILE *file, long offset, uint8_t *dest, size_t size);
+
 
 #endif 

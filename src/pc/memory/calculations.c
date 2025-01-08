@@ -23,9 +23,16 @@ int calculate_offset( void ) {
 int calculate_physical_memory_bits( void ) { 
     
     int physical_memory_bits = log2( PHYSICAL_MEMORY_SIZE ); 
-    physical_memory_bits += 20; 
+    physical_memory_bits += 20; // Asuming memory size in MiB 
 
     return physical_memory_bits;
 
 }
 
+
+int calculate_frame_num( void ){
+
+    int size_in_KiB = PHYSICAL_MEMORY_SIZE * KB; // Asumming KiB as page size 
+    return size_in_KiB / PAGE_SIZE; 
+
+} 

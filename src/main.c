@@ -28,7 +28,7 @@ int main(void) {
     initialize_signal_handler();
     physical_virtual_memory_mapping_calculations();
 
-    create_load_process( "some_file.h" );
+    create_load_process( "some_value.txt" );
 
     pc = initialize_pc(); 
 
@@ -40,8 +40,6 @@ int main(void) {
         perror("Failed to create clock thread");
         return 1;
     }
-
-    printf("Clock thread started. I am doing other things. \n");
     
     int duration_seconds = 1;
     
