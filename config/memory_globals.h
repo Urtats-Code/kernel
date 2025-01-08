@@ -6,6 +6,7 @@
 
 // Config files 
 #include "global_config.h"
+#include "process_globals.h"
 
 #ifndef MEMORY_GLOBALS_H
 #define MEMORY_GLOBALS_H
@@ -84,11 +85,21 @@ void print_loading_error_state(long bytes_loaded, long total_bytes);
 void print_read_chunk_info(long current_offset, size_t chunk_size, long bytes_loaded, long total_bytes);
 
 
-// long get_file_size(FILE *file);
+
+
 int find_free_frame(void);
 void load_file_into_memory(const char *file_name);
 int map_page_to_frame(int page_num, int frame_num);
 void read_file_chunk(FILE *file, long offset, uint8_t *dest, size_t size, long bytes_loaded, long total_bytes);
+
+// Loader  section 
+
+struct PCB* initialize_pcb(void);
+struct MM* initialize_mm(void);
+char* create_file_path(const char *file_name);
+long handle_file_operations(const char *route);
+void setup_memory_mapping(struct PCB *pcb, long file_size);
+void create_load_process(char *file_name);
 
 
 #endif 

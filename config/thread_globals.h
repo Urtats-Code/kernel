@@ -7,8 +7,8 @@
 #include "process_globals.h"
 #include "memory_globals.h"
 
-#ifndef CLOCK_GLOBALS_H
-#define CLOCK_GLOBALS_H
+#ifndef THREAD_GLOBALS
+#define THREAD_GLOBALS
 
 
 struct Thread {

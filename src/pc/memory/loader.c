@@ -7,6 +7,7 @@
 
 // Config files
 #include "../../../config/memory_globals.h"
+#include "../../../config/execute_globals.h"
 
 
 
@@ -137,13 +138,14 @@ int map_page_to_frame(int page_num, int frame_num) {
 }
 
 void read_file_chunk(FILE *file, long offset, uint8_t *dest, size_t size, long bytes_loaded, long total_bytes) {
+
+
     fseek(file, offset, SEEK_SET);
     size_t bytes_read = fread(dest, 1, size, file);
-
+    
     if( SHOW_CHUNK_INFO ){
         print_read_chunk_info(offset, bytes_read, bytes_loaded + bytes_read, total_bytes);
     }
-    
 }
 
 void load_file_into_memory(const char *file_name) {
@@ -226,21 +228,113 @@ void load_file_into_memory(const char *file_name) {
 }
 
 
-void create_load_process(char *file_name) {
+// PCB initialization function
+struct PCB* initialize_pcb( void ) {
+    struct PCB *new_PCB = (struct PCB *) malloc(sizeof(struct PCB));
+    
+    if (new_PCB == NULL) {
+        perror("Failed to allocate memory for PCB");
+        return NULL;
+    }
+    
+    new_PCB->pid = last_pid++;
+    new_PCB->state = 0;
+    new_PCB->priority = 0;
+    new_PCB->quantum = QUANTUM_TIME;
+    new_PCB->duration = MIN_PROCESS_DURATION + 
+                       (rand() % (MAX_PROCESS_DURATION - MIN_PROCESS_DURATION));
+    new_PCB->next_PCB = NULL;
+    
+    return new_PCB;
+}
 
+// Memory management initialization
+struct MM* initialize_mm( void ) {
+    struct MM *mm = (struct MM *)malloc(sizeof(struct MM));
+    if (mm == NULL) {
+        perror("Failed to allocate memory for MM");
+        return NULL;
+    }
+    return mm;
+}
+
+// Construct file path
+char* create_file_path(const char *file_name) {
     size_t route_size = strlen(SECONDARY_STORAGE_ROOT) + strlen(file_name) + 1;
     char *route = malloc(route_size);
     
     if (route == NULL) {
         perror("Route malloc failed");
-        return;
+        return NULL;
     }
     
     strcpy(route, SECONDARY_STORAGE_ROOT);
     strncat(route, file_name, strlen(file_name));
     
+    return route;
+}
+
+// File handling
+long handle_file_operations(const char *route) {
+    FILE *file = fopen(route, "rb");
+    if (file == NULL) {
+        perror("Error opening file");
+        return -1;
+    }
+    
+    long file_size = get_file_size(file);
+    fclose(file);
+    
+    return file_size;
+}
+
+// Setup memory mapping
+void setup_memory_mapping(struct PCB *pcb, long file_size) {
+    pcb->mm->pgb = (uint32_t)virtual_memory->page_table;
+    pcb->mm->code = 0;
+    pcb->mm->data = (file_size + (PAGE_SIZE * KB - 1)) / (PAGE_SIZE * KB);
+}
+
+// Main process creation function
+void create_load_process(char *file_name) {
+    // Initialize PCB
+    struct PCB *new_PCB = initialize_pcb();
+    if (new_PCB == NULL) {
+        return;
+    }
+    
+    // Initialize memory management
+    new_PCB->mm = initialize_mm();
+    if (new_PCB->mm == NULL) {
+        free(new_PCB);
+        return;
+    }
+    
+    // Create file path
+    char *route = create_file_path(file_name);
+    if (route == NULL) {
+        free(new_PCB->mm);
+        free(new_PCB);
+        return;
+    }
+    
+    // Handle file operations
+    long file_size = handle_file_operations(route);
+    if (file_size == -1) {
+        free(route);
+        free(new_PCB->mm);
+        free(new_PCB);
+        return;
+    }
+    
+    // Setup memory mapping
+    setup_memory_mapping(new_PCB, file_size);
+    
+    // Load file and add to process list
     load_file_into_memory(route);
+    add_to_process_list(new_PCB);
+    
+    print_first_pcb_document();
     
     free(route);
 }
-

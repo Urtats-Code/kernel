@@ -6,6 +6,9 @@
         "__config": "c",
         "timer_globals.h": "c",
         "process_globals.h": "c",
-        "memory_globals.h": "c"
+        "memory_globals.h": "c",
+        "global_config.h": "c",
+        "execute_globals.h": "c",
+        "pc_globals.h": "c"
     }
 }

@@ -6,8 +6,7 @@
 // =====================
 
 // Defines the number of timers used in the system.
-
-#define TIMER_NUM           4
+#define TIMER_NUM           4 
 
 // =====================
 // Process Duration Configuration
@@ -77,10 +76,10 @@
 #define SHOW_PROCESS_LIST               0
 #define SHOW_CLOCK_CONFIG               0
 #define SHOW_MEMORY_CONFIG              0
-#define SHOW_VIRTUAL_MEMORY_STATE       1
+#define SHOW_VIRTUAL_MEMORY_STATE       0
 #define SHOW_PHYSICAL_MEMORY_STATE      0
-#define SHOW_FILE_LOADING_INFO          1
-#define SHOW_CHUNK_INFO                 1
+#define SHOW_FILE_LOADING_INFO          0
+#define SHOW_CHUNK_INFO                 0
 #define SHOW_LOADING_ERROR_STATE        0
 
 #endif

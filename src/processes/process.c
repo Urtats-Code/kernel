@@ -9,6 +9,7 @@
 
 #include "../../config/process_globals.h"
 
+
 // Initialize extern variables
 
 struct PCB *head_pcb = NULL; 
@@ -118,14 +119,12 @@ void print_process_list( void ) {
     struct PCB *current = head_pcb; 
 
     printf("Process List:\n");
-    printf("PID\tState\tPriority\tQuantum\tDuration\n");
+    printf("PID\tQuantum\tDuration\n");
     printf("-----------------------------------------------\n");
 
     while (current != NULL) { 
-        printf("%d\t%d\t%d\t\t%d\t%d\n",
+        printf("%d\t%d\t%d\n",
                current->pid,
-               current->state,
-               current->priority,
                current->quantum,
                current->duration);
 
