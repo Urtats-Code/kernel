@@ -80,6 +80,7 @@
 #define SHOW_VIRTUAL_MEMORY_STATE       1
 #define SHOW_PHYSICAL_MEMORY_STATE      0
 #define SHOW_FILE_LOADING_INFO          1
+#define SHOW_CHUNK_INFO                 1
 #define SHOW_LOADING_ERROR_STATE        0
 
 #endif

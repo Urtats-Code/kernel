@@ -9,16 +9,9 @@
  * 
  */
 
-int calculate_offset( void ) { 
-
-    // Calcaulte the offset
-
-    double using_bytes = log2( PAGE_SIZE );
-    int offset = using_bytes + 10;  
-
-    return offset; 
-
-} 
+int calculate_offset(void) { 
+    return log2(PAGE_SIZE * KB);  // If PAGE_SIZE is 4, this gives us 12 bits (for 4KB pages)
+}
 
 int calculate_physical_memory_bits( void ) { 
     
@@ -29,6 +22,12 @@ int calculate_physical_memory_bits( void ) {
 
 }
 
+int calculate_page_num(void) {
+    // For 64MB physical memory with 4KB pages:
+    // 64MB = 64 * 1024 * 1024 bytes
+    // Number of pages = (64 * 1024 * 1024) / (4 * 1024) = 16384 pages
+    return (PHYSICAL_MEMORY_SIZE * KB * KB) / (PAGE_SIZE * KB);
+}
 
 int calculate_frame_num( void ){
 

@@ -77,6 +77,22 @@ void print_loading_error_state(long bytes_loaded, long total_bytes) {
 }
 
 
+void print_read_chunk_info(long current_offset, size_t chunk_size, long bytes_loaded, long total_bytes) {
+    printf("\n==============================================\n");
+    printf("|          Read Chunk Information            |\n");
+    printf("==============================================\n");
+    printf("Current Offset: %ld\n", current_offset);
+    printf("Chunk Size: %zu bytes\n", chunk_size);
+    printf("Bytes Loaded: %ld of %ld bytes\n", bytes_loaded, total_bytes);
+    printf("Pages Loaded: %ld of %ld pages\n", 
+           bytes_loaded / (PAGE_SIZE * KB),
+           (total_bytes + (PAGE_SIZE * KB - 1)) / (PAGE_SIZE * KB));
+    printf("Loading Progress: %.2f%%\n", 
+           (bytes_loaded * 100.0) / total_bytes);
+    printf("==============================================\n");
+}
+
+
 long get_file_size(FILE *file) {
     fseek(file, 0, SEEK_END);
     long size = ftell(file);
@@ -120,9 +136,14 @@ int map_page_to_frame(int page_num, int frame_num) {
     return 0;
 }
 
-void read_file_chunk(FILE *file, long offset, uint8_t *dest, size_t size) {
+void read_file_chunk(FILE *file, long offset, uint8_t *dest, size_t size, long bytes_loaded, long total_bytes) {
     fseek(file, offset, SEEK_SET);
-    fread(dest, 1, size, file);
+    size_t bytes_read = fread(dest, 1, size, file);
+
+    if( SHOW_CHUNK_INFO ){
+        print_read_chunk_info(offset, bytes_read, bytes_loaded + bytes_read, total_bytes);
+    }
+    
 }
 
 void load_file_into_memory(const char *file_name) {
@@ -134,6 +155,7 @@ void load_file_into_memory(const char *file_name) {
 
     long file_size = get_file_size(file);
     long bytes_remaining = file_size;
+    long bytes_loaded = 0; 
     int current_page = 0;
     long current_offset = 0;
     
@@ -153,6 +175,7 @@ void load_file_into_memory(const char *file_name) {
     
     while (bytes_remaining > 0) {
         int free_frame = find_free_frame();
+        
         if (free_frame == -1) {
             if (SHOW_LOADING_ERROR_STATE) {
                 printf("\nError: No free frames available\n");
@@ -167,7 +190,7 @@ void load_file_into_memory(const char *file_name) {
         
         uint8_t *frame_addr = physical_memory->memory_list + (free_frame * PAGE_SIZE * KB);
         
-        read_file_chunk(file, current_offset, frame_addr, bytes_to_read);
+        read_file_chunk(file, current_offset, frame_addr, bytes_to_read, bytes_loaded, file_size);
         
         if (map_page_to_frame(current_page, free_frame) < 0) {
             if (SHOW_LOADING_ERROR_STATE) {
@@ -180,6 +203,7 @@ void load_file_into_memory(const char *file_name) {
         
         bytes_remaining -= bytes_to_read;
         current_offset += bytes_to_read;
+        bytes_loaded += bytes_to_read;
         current_page++;
     }
 

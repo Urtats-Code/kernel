@@ -11,7 +11,7 @@
 void physical_virtual_memory_mapping_calculations( void ){ 
 
     int offset = calculate_offset(); 
-    int page_num = VIRTUAL_ADDRESS_SIZE - offset;
+    int page_num = calculate_page_num();
     int physical_memory_bits = calculate_physical_memory_bits();
     int frame_num = calculate_frame_num();
 

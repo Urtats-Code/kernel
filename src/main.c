@@ -28,7 +28,7 @@ int main(void) {
     initialize_signal_handler();
     physical_virtual_memory_mapping_calculations();
 
-    create_load_process( "some_value.txt" );
+    create_load_process( "photo.jpg" );
 
     pc = initialize_pc(); 
 

@@ -58,6 +58,7 @@ extern struct VirtualMemory     *virtual_memory;
 int calculate_offset(void);
 int calculate_physical_memory_bits(void);
 int calculate_frame_num(void);
+int calculate_page_num(void);
 
 // Physical Memory Function Prototypes
 
@@ -80,13 +81,14 @@ void print_virtual_memory_state(void);
 void print_physical_memory_state(void);
 void print_file_loading_info(const char *file_name, long file_size);
 void print_loading_error_state(long bytes_loaded, long total_bytes);
+void print_read_chunk_info(long current_offset, size_t chunk_size, long bytes_loaded, long total_bytes);
 
 
 // long get_file_size(FILE *file);
 int find_free_frame(void);
 void load_file_into_memory(const char *file_name);
 int map_page_to_frame(int page_num, int frame_num);
-void read_file_chunk(FILE *file, long offset, uint8_t *dest, size_t size);
+void read_file_chunk(FILE *file, long offset, uint8_t *dest, size_t size, long bytes_loaded, long total_bytes);
 
 
 #endif 
