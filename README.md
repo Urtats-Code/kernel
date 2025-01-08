@@ -106,4 +106,4 @@ These flags control if any message is required for a better visualization of the
 
 ---
 
-This configuration file is a powerful way to tailor the kernel simulation to your needs, whether for educational purposes, debugging, or performance evaluation. Adjust the settings as necessary to suit your desired behavior.
+This configuration file is a way to tailor the kernel simulation to your needs, whether for educational purposes, debugging, or performance evaluation. Adjust the settings as necessary to suit your desired behavior.
