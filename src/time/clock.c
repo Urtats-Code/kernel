@@ -52,7 +52,7 @@ void *create_clock(void *args) {
         usleep(tick_interval_microseconds);
 
         // Wait until all timers have completed their ticks
-        while (done_timers < TIMER_NUM) {
+        while (done_timers < (TIMER_NUM + 1)) {
             pthread_cond_wait(&timer_cond, &clock_mutex);
         }
 

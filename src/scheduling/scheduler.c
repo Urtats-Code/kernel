@@ -37,10 +37,8 @@ int policy_RR( struct Thread *thread ){
 
             printf(" At thread %d \n", thread -> id );
             printf(" PID | STATE | PRIORITY | QUANTUM | DURATION \n");
-            printf("%d\t%d\t%d\t\t%d\t%d\n",
+            printf("%d\t\t%d\t%d\n",
                    thread-> pcb ->pid,
-                   thread-> pcb ->state,
-                   thread-> pcb ->priority,
                    thread-> pcb ->quantum,
                    thread-> pcb ->duration);
 
@@ -89,10 +87,8 @@ int policy_SJF( struct Thread *thread ){
 
             printf(" At thread %d \n", thread -> id );
             printf(" PID | STATE | PRIORITY | QUANTUM | DURATION \n");
-            printf("%d\t%d\t%d\t\t%d\t%d\n",
+            printf("%d\t\t%d\t%d\n",
                    thread-> pcb ->pid,
-                   thread-> pcb ->state,
-                   thread-> pcb ->priority,
                    thread-> pcb ->quantum,
                    thread-> pcb ->duration);
 

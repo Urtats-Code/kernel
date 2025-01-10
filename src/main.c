@@ -14,9 +14,11 @@
 #include "../config/signal_globals.h"
 #include "../config/pc_globals.h"
 #include "../config/memory_globals.h"
+#include "../config/global_config.h"
 
 // Global variables
 
+pthread_t loader_thread;
 pthread_t clock_thread;
 pthread_t timers[TIMER_NUM];
 volatile sig_atomic_t terminate_flag = 0; 
@@ -28,16 +30,26 @@ int main(void) {
     initialize_signal_handler();
     physical_virtual_memory_mapping_calculations();
 
-    create_load_process( "some_value.txt" );
+    
 
     pc = initialize_pc(); 
 
 
-    struct Clock main_clock = {1, 10};
+    struct Clock main_clock = {1, CLOCK_HZ};
 
-    
+
+
+    char *file_name = "some_value.txt";  
+
+
+
     if (pthread_create(&clock_thread, NULL, create_clock, (void *)&main_clock) != 0) {
         perror("Failed to create clock thread");
+        return 1;
+    }
+
+    if (pthread_create(&loader_thread, NULL, create_load_process, (void *)file_name) != 0) {
+        perror("Failed to create loader thread");
         return 1;
     }
     
@@ -59,7 +71,7 @@ int main(void) {
 
         if( new_timer -> signal_time == 1 ){
 
-            duration_seconds = 3;
+            duration_seconds = i + 2;
 
             if (pthread_create(&timers[i], NULL, create_scheduler_timer, (void *) new_timer) != 0) {
                 perror("Failed to create timer thread");
@@ -120,6 +132,7 @@ void cleanup_and_exit( int signum ){
 
     pthread_cancel(clock_thread);
     pthread_join(clock_thread, NULL);
+    pthread_join(loader_thread, NULL);
 
     printf("Freeing alocated PCB memory. \n");
 
@@ -132,6 +145,8 @@ void cleanup_and_exit( int signum ){
     printf("Freeing alocated simulated Virtual / Physical memory . \n");
 
     free_physical_virtual_memory();
+
+    
 
     printf("Cleaned up resources. Exiting program.\n");
     exit(signum); 

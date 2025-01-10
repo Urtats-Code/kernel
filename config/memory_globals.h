@@ -72,7 +72,7 @@ void initialize_physical_memory(void);
 
 void create_virtual_memory(int page_num);
 void initialize_virtual_memory(void);
-void create_load_process(char *file_name);
+
 
 
 // Utils 
@@ -99,7 +99,7 @@ struct MM* initialize_mm(void);
 char* create_file_path(const char *file_name);
 long handle_file_operations(const char *route);
 void setup_memory_mapping(struct PCB *pcb, long file_size);
-void create_load_process(char *file_name);
+void *create_load_process(void *args);
 
 
 #endif 

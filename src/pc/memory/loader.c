@@ -4,10 +4,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <limits.h>
 
 // Config files
 #include "../../../config/memory_globals.h"
 #include "../../../config/execute_globals.h"
+#include "../../../config/timer_globals.h"
+#include "../../../config/clock_globals.h"
+#include "../../../config/process_globals.h"
+#include "../../../config/signal_globals.h"
+#include "../../../config/scheduler_globlas.h"
+
+
+
 
 
 
@@ -175,7 +184,12 @@ void load_file_into_memory(const char *file_name) {
         print_physical_memory_state();
     }
     
-    while (bytes_remaining > 0) {
+    pthread_mutex_lock(&clock_mutex);
+
+    while ( program_executing  &&  bytes_remaining > 0) {
+        
+        done_timers += 1;        
+        
         int free_frame = find_free_frame();
         
         if (free_frame == -1) {
@@ -207,7 +221,13 @@ void load_file_into_memory(const char *file_name) {
         current_offset += bytes_to_read;
         bytes_loaded += bytes_to_read;
         current_page++;
+
+        pthread_cond_signal(&timer_cond);  
+        pthread_cond_wait(&free_timer_tick, &clock_mutex);
+
     }
+
+    pthread_mutex_unlock(&clock_mutex);  
 
     fclose(file);
     
@@ -241,8 +261,7 @@ struct PCB* initialize_pcb( void ) {
     new_PCB->state = 0;
     new_PCB->priority = 0;
     new_PCB->quantum = QUANTUM_TIME;
-    new_PCB->duration = MIN_PROCESS_DURATION + 
-                       (rand() % (MAX_PROCESS_DURATION - MIN_PROCESS_DURATION));
+    new_PCB->duration = INT_MAX;	
     new_PCB->next_PCB = NULL;
     
     return new_PCB;
@@ -296,18 +315,21 @@ void setup_memory_mapping(struct PCB *pcb, long file_size) {
 }
 
 // Main process creation function
-void create_load_process(char *file_name) {
+void *create_load_process( void *args ) {
+    
+    char *file_name = (char *)args;
+
     // Initialize PCB
     struct PCB *new_PCB = initialize_pcb();
     if (new_PCB == NULL) {
-        return;
+        return NULL;
     }
     
     // Initialize memory management
     new_PCB->mm = initialize_mm();
     if (new_PCB->mm == NULL) {
         free(new_PCB);
-        return;
+        return NULL;
     }
     
     // Create file path
@@ -315,7 +337,7 @@ void create_load_process(char *file_name) {
     if (route == NULL) {
         free(new_PCB->mm);
         free(new_PCB);
-        return;
+        return NULL;
     }
     
     // Handle file operations
@@ -324,16 +346,18 @@ void create_load_process(char *file_name) {
         free(route);
         free(new_PCB->mm);
         free(new_PCB);
-        return;
+        return NULL;
     }
     
     // Setup memory mapping
     setup_memory_mapping(new_PCB, file_size);
+    add_to_process_list(new_PCB);
     
     // Load file and add to process list
     load_file_into_memory(route);
-    add_to_process_list(new_PCB);
     
+    new_PCB -> duration = 0;
+
     print_first_pcb_document();
     
     free(route);
